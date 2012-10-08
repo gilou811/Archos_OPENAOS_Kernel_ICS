@@ -377,6 +377,16 @@ static int  omap34xx_get_omap_version(char *str)
 			omap_chip.oc |= CHIP_IS_OMAP3630ES1;
 			omap_revision = OMAP3630_REV_ES1_0;
 			break;
+		case 3630300:
+			omap_revision_id = OMAP_3630_300;
+			omap_chip.oc |= CHIP_IS_OMAP3630ES1;
+			omap_revision = OMAP3630_REV_ES1_0;
+			break;
+		case 3630600:
+			omap_revision_id = OMAP_3630_600;
+			omap_chip.oc |= CHIP_IS_OMAP3630ES1;
+			omap_revision = OMAP3630_REV_ES1_0;
+			break;
 		case 3630800:
 			omap_revision_id = OMAP_3630_800;
 			omap_chip.oc |= CHIP_IS_OMAP3630ES1;
