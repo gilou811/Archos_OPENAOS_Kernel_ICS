@@ -213,7 +213,7 @@ void omap_pm_dsp_set_min_opp(struct device *dev, unsigned long f)
 
 	pr_debug("OMAP PM: DSP requests minimum VDD1 OPP to be %d\n", opp_id);
 
-	if (cpu_is_omap3630()) {
+if (cpu_is_omap3630()) {
 		/*
 		 * check if OPP requested is 65Mz or greater if yes set
 		 * max opp constraint to OPP4, Which limits scaling of VDD1
@@ -222,7 +222,9 @@ void omap_pm_dsp_set_min_opp(struct device *dev, unsigned long f)
 		 */
 		if ((f > S65M) && !vdd1_max_opp) {
 			vdd1_max_opp = 1;
-			omap_pm_vdd1_set_max_opp(dev, VDD1_OPP4);
+//			omap_pm_vdd1_set_max_opp(dev, VDD1_OPP4);
+//			omap_pm_vdd1_set_max_opp(dev, VDD1_OPP5);
+			omap_pm_vdd1_set_max_opp(dev, VDD1_OPP6);
 		} else if ((f < S260M) && vdd1_max_opp) {
 			omap_pm_vdd1_set_max_opp(dev, 0);
 			vdd1_max_opp = 0;
@@ -234,6 +236,7 @@ void omap_pm_dsp_set_min_opp(struct device *dev, unsigned long f)
 		 */
 		if (f == S65M)
 			f = S260M;
+//			f = S520M;
 	}
 
 	opp_id = get_opp_id(dsp_opps + MAX_VDD1_OPP, f);
