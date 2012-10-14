@@ -117,7 +117,7 @@ static int _resume_io(void)
 
 /* Headphone plug detection stuff ------------------------------------------ */
 
-#define HEAPHONE_SW_NAME	"headphone_switch"
+#define HEAPHONE_SW_NAME	"Headset"
 
 struct work_struct headphone_work;
 
@@ -133,10 +133,10 @@ static ssize_t print_headphone_state(struct switch_dev *sdev, char *buf)
 	switch(sdev->state)
 	{
 		case 0:
-			buflen = sprintf(buf, "Not plugged\n");
+			buflen = sprintf(buf, "0");
 			break;
 		case 1:
-			buflen = sprintf(buf, "Plugged\n");
+			buflen = sprintf(buf, "1");
 			break;
 		default:
 			buflen = sprintf(buf, "Unknown\n");
