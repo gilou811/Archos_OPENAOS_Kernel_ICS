@@ -116,8 +116,8 @@ static int _resume_io(void)
 }
 
 /* Headphone plug detection stuff ------------------------------------------ */
-
-#define HEAPHONE_SW_NAME	"Headset"
+//Path used in ICS CM9 works well with wiredaccessory.java without modification
+#define HEAPHONE_SW_NAME	"h2w"
 
 struct work_struct headphone_work;
 
