@@ -419,17 +419,17 @@ u8 omap_pm_get_max_vdd1_opp()
 		switch (omap_rev_id()) {
 		case OMAP_3630:
 		default:
-			if (sr_read_efuse_nvalues(VDD1_OPP5) != 0)
+/*			if (sr_read_efuse_nvalues(VDD1_OPP5) != 0)
 				return VDD1_OPP5;
-			else
-				return VDD1_OPP4;
-		case OMAP_3630_800:
-			return VDD1_OPP3;
-		case OMAP_3630_1000:
-			return VDD1_OPP4;
-		case OMAP_3630_1200:
+			else*/
+		case OMAP_3630_600:
 			return VDD1_OPP5;
+		case OMAP_3630_800:
+			return VDD1_OPP6;
+		case OMAP_3630_1000:
+			return VDD1_OPP6;
 		}
+
 	} else {
 		if (omap_rev() < OMAP3430_REV_ES3_1)
 			return VDD1_OPP5;
