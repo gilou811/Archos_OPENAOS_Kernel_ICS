@@ -117,6 +117,7 @@ enum hrtimer_restart pointer_timer_callback( struct hrtimer *timer_handle )
 				input_event(td->dev, EV_ABS, ABS_MT_POSITION_Y, p->data.y);
 			}
 			input_event(td->dev, EV_ABS, ABS_MT_TOUCH_MAJOR, 0);
+			input_event(td->dev, EV_ABS, ABS_MT_PRESSURE, 0);
 
 			input_mt_sync(td->dev);
 			input_event(td->dev, EV_SYN, 0, 0);
@@ -128,6 +129,8 @@ enum hrtimer_restart pointer_timer_callback( struct hrtimer *timer_handle )
 				input_sync(td->dev);
 			}
 #endif
+			input_event(td->dev, EV_KEY, BTN_TOUCH, 0);
+			input_sync(td->dev);
 
 			// and go to recovery until proper release.
 			p->state = TS_RECOVERING;
@@ -179,7 +182,7 @@ static int hanvon_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 				case HID_DG_DEVICEINDEX:
 				case HID_DG_CONTACTCOUNT:
 				case HID_DG_CONTACTMAX:
-				case HID_DG_TIPPRESSURE:
+				//case HID_DG_TIPPRESSURE:
 				case HID_DG_WIDTH:
 				case HID_DG_HEIGHT:
 					return -1;
@@ -198,6 +201,12 @@ static int hanvon_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 					hid_map_usage(hi, usage, bit, max,
 							EV_ABS, ABS_MT_TRACKING_ID);
 					return 1;
+				case HID_DG_TIPPRESSURE:
+					hid_map_usage(hi, usage, bit, max, EV_ABS, ABS_MT_PRESSURE);
+					input_set_abs_params(hi->input, ABS_MT_PRESSURE, 0, 255, 0, 0);
+					input_set_abs_params(hi->input, ABS_PRESSURE, 0, 255, 0, 0);
+					return 1;
+				  
 
 			}
 			return 0;
@@ -258,6 +267,7 @@ static void hanvon_filter_event(struct hanvon_data *td, struct pointer_data * re
 				input_event(input, EV_KEY, BTN_TOUCH, 1);
 			}
 #endif
+				input_event(input, EV_KEY, BTN_TOUCH, 1);
 			// next time, we'll only rearm timer and 
 			// issue position update if ts emulation.
 			p->state = TS_READING;
@@ -279,7 +289,7 @@ static void hanvon_filter_event(struct hanvon_data *td, struct pointer_data * re
 					input_event(input, EV_ABS, ABS_MT_POSITION_Y, p->data.y);
 				}
 				input_event(input, EV_ABS, ABS_MT_TOUCH_MAJOR, p->data.z);
-
+				input_event(input, EV_ABS, ABS_MT_PRESSURE, 255);
 				// and mt sync 
 				input_mt_sync(input);
 
@@ -295,7 +305,7 @@ static void hanvon_filter_event(struct hanvon_data *td, struct pointer_data * re
 						input_event(input, EV_ABS, ABS_Y, p->data.y);
 					}
 					input_event(input, EV_ABS, ABS_PRESSURE, p->data.z);
-
+					
 					// and sync
 					input_sync(input);
 				}
@@ -329,6 +339,7 @@ static void hanvon_filter_event(struct hanvon_data *td, struct pointer_data * re
 				input_event(input, EV_ABS, ABS_MT_POSITION_Y, p->data.y);
 			}
 			input_event(input, EV_ABS, ABS_MT_TOUCH_MAJOR, p->data.z);
+			input_event(input, EV_ABS, ABS_MT_PRESSURE,0);
 			input_mt_sync(input);
 
 #ifdef CONFIG_HID_HANVON_10_MONO_TSP_EMULATION
@@ -339,6 +350,10 @@ static void hanvon_filter_event(struct hanvon_data *td, struct pointer_data * re
 				input_sync(input);
 			}
 #endif
+
+			input_event(input, EV_KEY, BTN_TOUCH, 0);
+			input_sync(input);
+			
 			// start debouncer.
 			p->state = TS_DEBOUNCING;
 			hrtimer_start( &p->timer, ktime_set( 0, debounce_delay(p->sample_count) ), HRTIMER_MODE_REL );
@@ -740,4 +755,3 @@ static void __exit hanvon_exit(void)
 
 module_init(hanvon_init);
 module_exit(hanvon_exit);
-
