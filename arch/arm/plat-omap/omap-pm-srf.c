@@ -222,9 +222,9 @@ if (cpu_is_omap3630()) {
 		 */
 		if ((f > S65M) && !vdd1_max_opp) {
 			vdd1_max_opp = 1;
-//			omap_pm_vdd1_set_max_opp(dev, VDD1_OPP4);
-//			omap_pm_vdd1_set_max_opp(dev, VDD1_OPP5);
-			omap_pm_vdd1_set_max_opp(dev, VDD1_OPP6);
+			omap_pm_vdd1_set_max_opp(dev, VDD1_OPP4);
+			omap_pm_vdd1_set_max_opp(dev, VDD1_OPP5);
+//			omap_pm_vdd1_set_max_opp(dev, VDD1_OPP6);
 		} else if ((f < S260M) && vdd1_max_opp) {
 			omap_pm_vdd1_set_max_opp(dev, 0);
 			vdd1_max_opp = 0;
@@ -419,9 +419,9 @@ u8 omap_pm_get_max_vdd1_opp()
 		switch (omap_rev_id()) {
 		case OMAP_3630:
 		default:
-/*			if (sr_read_efuse_nvalues(VDD1_OPP5) != 0)
+			if (sr_read_efuse_nvalues(VDD1_OPP5) != 0)
 				return VDD1_OPP5;
-			else*/
+			else
 		case OMAP_3630_600:
 			return VDD1_OPP5;
 		case OMAP_3630_800:
